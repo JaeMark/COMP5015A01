@@ -9,9 +9,38 @@
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateScore, float, NewScore);
+
 UCLASS()
 class COMP5015A01_API AMyGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
+	TSubclassOf<UUserWidget> DefaultGameCompleteWidget;
+
+	UPROPERTY()
+	UUserWidget* GameCompleteWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
+	TSubclassOf<UUserWidget> DefaultScoreWidget;
+
+	UPROPERTY()
+	UUserWidget* ScoreWidget;
+
+	UPROPERTY()
+	float CurrentScore = 0.0f;
+
+	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
+	FOnUpdateScore OnUpdateScore;
+
+public:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	void GameCompleted(bool PlayerWon);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void UpdateScore(float DeltaScore);
 };
