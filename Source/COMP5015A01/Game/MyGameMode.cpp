@@ -5,6 +5,12 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
 
+AMyGameMode::AMyGameMode()
+{
+	// Set this pawn to call Tick() every frame. You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+}
+
 void AMyGameMode::BeginPlay() {
 
 	if (DefaultScoreWidget) {
@@ -18,18 +24,17 @@ void AMyGameMode::BeginPlay() {
 	OnUpdateScore.Broadcast(CurrentScore);
 }
 
-void AMyGameMode::GameCompleted(bool PlayerWon) {
+// Called every frame
+void AMyGameMode::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+void AMyGameMode::GameCompleted() {
 	if (DefaultGameCompleteWidget) {
 		GameCompleteWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultGameCompleteWidget);
 		if (GameCompleteWidget) {
 			GameCompleteWidget->AddToViewport();
-			UTextBlock* LostOrComplete = Cast<UTextBlock>(
-				GameCompleteWidget->GetWidgetFromName(TEXT("LostOrComplete"))
-			);
-			if (LostOrComplete) {
-				const FText WinLossMessage = PlayerWon ? FText::FromString("You Won!") : FText::FromString("You Lost!");
-				LostOrComplete->SetText(WinLossMessage);
-			}
 		}
 	}
 	else {
