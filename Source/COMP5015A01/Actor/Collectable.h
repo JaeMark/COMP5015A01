@@ -18,16 +18,27 @@ public:
 	// Sets default values for this actor's properties
 	ACollectable();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float PickupValue = 1.0f;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
 protected:
 	// ASSET COMPONENTS
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		USceneComponent* Root;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
 		USphereComponent* Collider;
 
