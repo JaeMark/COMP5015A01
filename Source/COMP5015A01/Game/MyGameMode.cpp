@@ -22,12 +22,13 @@ void AMyGameMode::BeginPlay() {
 	}
 
 	OnUpdateScore.Broadcast(CurrentScore);
+
+	GetWorldTimerManager().SetTimer(CountdownTimer, this, &AMyGameMode::UpdateTimer, 1.0f, false);
 }
 
-// Called every frame
-void AMyGameMode::Tick(float DeltaTime)
+void AMyGameMode::UpdateTimer()
 {
-	Super::Tick(DeltaTime);
+	
 }
 
 void AMyGameMode::GameCompleted() {

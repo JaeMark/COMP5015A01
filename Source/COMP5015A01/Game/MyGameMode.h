@@ -7,6 +7,7 @@
 #include "MyGameMode.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateScore, float, NewScore);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateTimer, float, NewScore);
 
 UCLASS()
 class COMP5015A01_API AMyGameMode : public AGameModeBase
@@ -17,10 +18,9 @@ public:
 	// Sets default values for this pawn's properties
 	AMyGameMode();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 protected:
+	FTimerHandle CountdownTimer;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
 	TSubclassOf<UUserWidget> DefaultGameCompleteWidget;
 
@@ -39,10 +39,14 @@ protected:
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
 	FOnUpdateScore OnUpdateScore;
 
+	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
+	FOnUpdateScore OnUpdateTimer;
+
 public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void GameCompleted();
+	void UpdateTimer();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void UpdateScore(float DeltaScore);
