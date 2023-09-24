@@ -5,8 +5,7 @@
 #include "Components/TextBlock.h"
 #include <Kismet/GameplayStatics.h>
 
-AMyGameMode::AMyGameMode()
-{
+AMyGameMode::AMyGameMode() {
 	// Set this pawn to call Tick() every frame. You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -28,23 +27,22 @@ void AMyGameMode::BeginPlay() {
 
 void AMyGameMode::UpdateTimer()
 {
-	if (CountdownTime > 0) {
-		// Convert seconds to minutes and seconds
-		int32 Minutes = CountdownTime / 60;
-		int32 Seconds = CountdownTime % 60;
+	// Convert seconds to minutes and seconds
+	int32 Minutes = CountdownTime / 60;
+	int32 Seconds = CountdownTime % 60;
 
-		// Format the time as "MM:SS"
-		FString TimerText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
+	// Format the time as "MM:SS"
+	FString TimerText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
 
-		// Update your UI with the TimerText
-		OnUpdateTimer.Broadcast(TimerText);
+	// Update your UI with the TimerText
+	OnUpdateTimer.Broadcast(TimerText);
 
-		CountdownTime--;
-	}
-	else {
-		// Timer has reached zero, do something (e.g., trigger game completion)
+	if (CountdownTime == 0) {
+		GetWorldTimerManager().ClearTimer(CountdownTimer);
 		GameCompleted();
 	}
+
+	CountdownTime--;
 }
 
 void AMyGameMode::GameCompleted() {
