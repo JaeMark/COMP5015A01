@@ -3,6 +3,7 @@
 
 #include "MyGameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/TextBlock.h"
 #include "Blueprint/UserWidget.h"
 
 
@@ -47,6 +48,13 @@ void UMyGameInstance::StartGame()
 void UMyGameInstance::SetPlayingState(bool IsPlaying)
 {
 	bIsPlaying = IsPlaying;
+	if (StartWidget) {
+		UTextBlock* StartButtonText = Cast<UTextBlock>(StartWidget->GetWidgetFromName(TEXT("StartButtonText")));
+		if (StartButtonText) {
+			const FText WinLossMessage = bIsPlaying ? FText::FromString("Resume") : FText::FromString("Start");
+			StartButtonText->SetText(WinLossMessage);
+		}
+	}
 }
 
 void UMyGameInstance::LoadLevel()
@@ -67,7 +75,7 @@ void UMyGameInstance::ResumeGame() {
 	SetInputMode(true);
 	UGameplayStatics::SetGamePaused(GetWorld(), false);
 	if (StartWidget) {
-		StartWidget->RemoveFromViewport();
+		StartWidget->RemoveFromParent();
 	}
 }
 
