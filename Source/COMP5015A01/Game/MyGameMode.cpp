@@ -69,3 +69,12 @@ void AMyGameMode::UpdateScore_Implementation(float DeltaScore) {
 	CurrentScore += DeltaScore;
 	OnUpdateScore.Broadcast(CurrentScore);
 }
+
+void AMyGameMode::ReplayGame() {
+	if (GameLevel.IsNull()){
+		UE_LOG(LogTemp, Error, TEXT("No GameLevel set"));
+		return;
+	}
+
+	UGameplayStatics::OpenLevelBySoftObjectPtr(this, GameLevel);
+}

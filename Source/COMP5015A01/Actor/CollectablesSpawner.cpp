@@ -19,7 +19,8 @@ void ACollectablesSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(SpawnerTimer, [this]() { SpawnCollectable(); }, 2.0f, true);
+	GetWorldTimerManager().SetTimer(SpawnerTimer, this, &ACollectablesSpawner::SpawnCollectable, 2.0f, true);
+
 }
 
 // Called every frame

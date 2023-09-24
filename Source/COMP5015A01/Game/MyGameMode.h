@@ -37,7 +37,10 @@ protected:
 	float CurrentScore = 0.0f;
 
 	UPROPERTY()
-	int32 CountdownTime = 20;
+	int32 CountdownTime = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSoftObjectPtr<UWorld> GameLevel;
 
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
 	FOnUpdateScore OnUpdateScore;
@@ -48,9 +51,14 @@ protected:
 public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	void GameCompleted();
-	void UpdateTimer();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void UpdateScore(float DeltaScore);
+
+	UFUNCTION(BlueprintCallable, Category = "Game")
+	void ReplayGame();
+
+protected:
+	void GameCompleted();
+	void UpdateTimer();
 };
