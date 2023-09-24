@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "MyGameMode.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
+#include <Kismet/GameplayStatics.h>
 
 AMyGameMode::AMyGameMode()
 {
@@ -28,10 +28,20 @@ void AMyGameMode::BeginPlay() {
 
 void AMyGameMode::UpdateTimer()
 {
-	
+
 }
 
 void AMyGameMode::GameCompleted() {
+	// Set the input mode to UI Only
+	FInputModeUIOnly InputModeData;
+	InputModeData.SetWidgetToFocus(GameCompleteWidget->TakeWidget());
+	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+
+	// Create a variable to store the player controller
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+	PlayerController->SetInputMode(InputModeData);
+	PlayerController->bShowMouseCursor = true;
+
 	if (DefaultGameCompleteWidget) {
 		GameCompleteWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultGameCompleteWidget);
 		if (GameCompleteWidget) {

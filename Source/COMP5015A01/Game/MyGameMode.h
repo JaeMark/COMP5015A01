@@ -7,7 +7,7 @@
 #include "MyGameMode.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateScore, float, NewScore);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateTimer, float, NewScore);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateTimer, float, NewTime);
 
 UCLASS()
 class COMP5015A01_API AMyGameMode : public AGameModeBase
