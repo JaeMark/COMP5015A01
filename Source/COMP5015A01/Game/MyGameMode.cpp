@@ -18,6 +18,8 @@ void AMyGameMode::BeginPlay() {
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultStartWidget has not been set."));
 	}
 
+	SetInputMode(true);
+
 	if (DefaultGameHUD) {
 		GameHUD = CreateWidget<UUserWidget>(GetWorld(), DefaultGameHUD);
 		GameHUD->AddToViewport();
@@ -58,7 +60,7 @@ void AMyGameMode::SetInputMode(bool GameOnly) const {
 		return;
 	}
 	if (APlayerController* const Controller = World->GetFirstPlayerController()) {
-		if (!GameOnly) {
+		if (GameOnly) {
 			const FInputModeGameOnly InputMode;
 			Controller->SetInputMode(InputMode);
 		}
@@ -97,6 +99,7 @@ void AMyGameMode::ReplayGame() {
 		return;
 	}
 
+	UGameplayStatics::SetGamePaused(GetWorld(), false);
 	UGameplayStatics::OpenLevelBySoftObjectPtr(this, GameLevel);
 }
 
@@ -110,5 +113,6 @@ void AMyGameMode::TogglePauseGame(){
 		StartWidget->RemoveFromViewport();
 	}
 
+	SetInputMode(!bPauseGame);
 	UGameplayStatics::SetGamePaused(GetWorld(), bPauseGame);
 }
