@@ -65,7 +65,7 @@ public:
 	void UpdateScore(float DeltaScore);
 
 	UFUNCTION(BlueprintCallable, Category = "Game")
-	void ReplayGame();
+	void StartGame();
 
 	UFUNCTION(BlueprintCallable, Category = "Game")
 	void TogglePauseGame();

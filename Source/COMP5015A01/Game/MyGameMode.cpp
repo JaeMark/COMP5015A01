@@ -84,6 +84,8 @@ void AMyGameMode::GameCompleted() {
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultGameCompleteWidget has not been set."));
 	}
 
+	OnUpdateScore.Broadcast(CurrentScore);
+
 	// Pause game
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 }
@@ -93,7 +95,7 @@ void AMyGameMode::UpdateScore_Implementation(float DeltaScore) {
 	OnUpdateScore.Broadcast(CurrentScore);
 }
 
-void AMyGameMode::ReplayGame() {
+void AMyGameMode::StartGame() {
 	if (GameLevel.IsNull()){
 		UE_LOG(LogTemp, Error, TEXT("No GameLevel set"));
 		return;
