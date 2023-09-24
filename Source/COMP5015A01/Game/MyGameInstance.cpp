@@ -63,10 +63,18 @@ void UMyGameInstance::LoadLevel()
 	UGameplayStatics::OpenLevelBySoftObjectPtr(this, GameLevel);
 }
 
-void UMyGameInstance::ResumeGame()
-{
+void UMyGameInstance::ResumeGame() {
+	SetInputMode(true);
 	UGameplayStatics::SetGamePaused(GetWorld(), false);
 	if (StartWidget) {
 		StartWidget->RemoveFromViewport();
+	}
+}
+
+void UMyGameInstance::PauseGame() {
+	SetInputMode(false);
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+	if (StartWidget) {
+		StartWidget->AddToViewport();
 	}
 }

@@ -42,6 +42,9 @@ public:
 	UFUNCTION()
 	void SetPlayingState(bool IsPlaying);
 
+	UFUNCTION()
+	void PauseGame();
+
 protected:
 	void ResumeGame();
 	void LoadLevel();

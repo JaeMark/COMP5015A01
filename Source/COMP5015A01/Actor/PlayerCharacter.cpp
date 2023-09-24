@@ -9,6 +9,7 @@
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Kismet/GameplayStatics.h"
 #include "COMP5015A01/Game/MyGameMode.h"
+#include "COMP5015A01/Game/MyGameInstance.h"
 
 using UEILPS = UEnhancedInputLocalPlayerSubsystem;
 using UEIC = UEnhancedInputComponent;
@@ -45,6 +46,7 @@ APlayerCharacter::APlayerCharacter()
     Cube->AddImpulse(InitialImpulse, NAME_None, true);
 
     GameModeRef = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+    GameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
 // Called when the game starts or when spawned
@@ -92,8 +94,8 @@ void APlayerCharacter::Jump(const FInputActionValue& Value)
 
 void APlayerCharacter::PauseGame()
 {
-    if (GameModeRef != NULL) {
-        GameModeRef->StartGame();
+    if (GameModeRef) {
+        GameInstanceRef->PauseGame();
     }
 }
 

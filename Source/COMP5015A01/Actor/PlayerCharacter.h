@@ -15,6 +15,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UFloatingPawnMovement;
 class AMyGameMode;
+class UMyGameInstance;
 
 UCLASS()
 class COMP5015A01_API APlayerCharacter : public APawn
@@ -50,6 +51,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* PauseAction;
+
+	UPROPERTY(BlueprintReadOnly)
+	UMyGameInstance* GameInstanceRef;
 
 	void MoveHorizontally(const FInputActionValue& Value);
 	void Jump(const FInputActionValue& Value);

@@ -15,7 +15,8 @@ void AMyGameMode::BeginPlay() {
 	GameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 	if (GameInstanceRef) {
-		GameInstanceRef->SetInputMode(true);
+		GameInstanceRef->SetInputMode(true);	
+		GameInstanceRef->SetPlayingState(true);
 	}
 
 	if (DefaultGameHUD) {
@@ -25,8 +26,6 @@ void AMyGameMode::BeginPlay() {
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultScoreWidget has not been set."));
 	}
-
-	bIsPlaying = true;
 
 	OnUpdateScore.Broadcast(CurrentScore);
 	GetWorldTimerManager().SetTimer(CountdownTimer, this, &AMyGameMode::UpdateTimer, 1.0f, true);
@@ -52,26 +51,6 @@ void AMyGameMode::UpdateTimer()
 	CountdownTime--;
 }
 
-void AMyGameMode::SetInputMode(bool GameOnly) const {
-	const UWorld* World = GetWorld();
-	if (!World) {
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("Cannot access world"));
-		return;
-	}
-	if (APlayerController* const Controller = World->GetFirstPlayerController()) {
-		if (GameOnly) {
-			const FInputModeGameOnly InputMode;
-			Controller->SetInputMode(InputMode);
-		}
-		else {
-			const FInputModeUIOnly InputMode;
-			Controller->SetInputMode(InputMode);
-		}
-
-		Controller->bShowMouseCursor = !GameOnly;
-	}
-}
-
 void AMyGameMode::GameCompleted() {
 	if (DefaultGameCompleteWidget) {
 		GameCompleteWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultGameCompleteWidget);
@@ -83,7 +62,9 @@ void AMyGameMode::GameCompleted() {
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultGameCompleteWidget has not been set."));
 	}
 
-	bIsPlaying = false;
+	if (GameInstanceRef) {
+		GameInstanceRef->SetPlayingState(false);
+	}
 	OnUpdateScore.Broadcast(CurrentScore);
 
 	// Pause game
@@ -93,36 +74,4 @@ void AMyGameMode::GameCompleted() {
 void AMyGameMode::UpdateScore_Implementation(float DeltaScore) {
 	CurrentScore += DeltaScore;
 	OnUpdateScore.Broadcast(CurrentScore);
-}
-
-void AMyGameMode::StartGame() {
-	if (bIsPlaying) {
-		// Pause game if game is still running
-		TogglePauseGame();
-	} else {
-		// Load level if game is not running
-		if (GameLevel.IsNull()) {
-			UE_LOG(LogTemp, Error, TEXT("No GameLevel set"));
-			return;
-		}
-
-		UGameplayStatics::SetGamePaused(GetWorld(), false);
-		UGameplayStatics::OpenLevelBySoftObjectPtr(this, GameLevel);
-	}
-}
-
-void AMyGameMode::TogglePauseGame(){
-	bPauseGame = !bPauseGame;
-
-	if (bPauseGame) {
-		StartWidget->AddToViewport();
-	}
-	else {
-		StartWidget->RemoveFromViewport();
-	}
-
-	if (GameInstanceRef != NULL) {
-		GameInstanceRef->SetInputMode(!bPauseGame);
-	}
-	UGameplayStatics::SetGamePaused(GetWorld(), bPauseGame);
 }

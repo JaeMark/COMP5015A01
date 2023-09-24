@@ -52,12 +52,6 @@ protected:
 	UPROPERTY()
 	int32 CountdownTime = 5;
 
-	UPROPERTY()
-	bool bPauseGame = false;
-
-	UPROPERTY()
-	bool bIsPlaying = false;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSoftObjectPtr<UWorld> GameLevel;
 
@@ -74,14 +68,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void UpdateScore(float DeltaScore);
 
-	UFUNCTION(BlueprintCallable, Category = "Game")
-	void StartGame();
-
-	UFUNCTION(BlueprintCallable, Category = "Input Mode")
-	void SetInputMode(bool GameOnly) const;
-
 protected:
 	void GameCompleted();
 	void UpdateTimer();
-	void TogglePauseGame();
 };
