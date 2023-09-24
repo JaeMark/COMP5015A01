@@ -74,7 +74,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void UpdateScore(float DeltaScore);
 
-protected:
 	void GameCompleted();
+
+protected:
 	void UpdateTimer();
 };

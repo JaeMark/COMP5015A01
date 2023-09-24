@@ -67,10 +67,18 @@ void APlayerCharacter::BeginPlay()
     }
 }
 
+void APlayerCharacter::PlayerDied() {
+    if (GameModeRef) {
+        GameModeRef->GameCompleted();
+    }
+}
+
 // Called every frame
-void APlayerCharacter::Tick(float DeltaTime)
-{
+void APlayerCharacter::Tick(float DeltaTime) {
     Super::Tick(DeltaTime);
+    if (GetActorLocation().Z < KillZThreshold) {
+        PlayerDied();
+    }
 }
 
 // Called to bind functionality to input

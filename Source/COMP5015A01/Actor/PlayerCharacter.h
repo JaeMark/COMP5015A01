@@ -30,6 +30,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void PlayerDied();
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -38,6 +40,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
+	FTimerHandle GameCompleteTimer;
+
 	// ENHANCED INPUT SYSTEM
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputMappingContext* InputMappingContext;
@@ -75,6 +79,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Movement");
 	float BoostForce = 1800.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float KillZThreshold = -2000;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AMyGameMode* GameModeRef;
