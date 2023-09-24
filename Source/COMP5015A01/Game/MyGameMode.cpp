@@ -3,7 +3,8 @@
 #include "MyGameMode.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
-#include <Kismet/GameplayStatics.h>
+#include "Kismet/GameplayStatics.h"
+#include "COMP5015A01/Game/MyGameInstance.h"
 
 AMyGameMode::AMyGameMode() {
 	// Set this pawn to call Tick() every frame. You can turn this off to improve performance if you don't need it.
@@ -11,6 +12,8 @@ AMyGameMode::AMyGameMode() {
 }
 
 void AMyGameMode::BeginPlay() {
+	GameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
 	if (DefaultStartWidget) {
 		StartWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultStartWidget);
 	}
@@ -18,7 +21,9 @@ void AMyGameMode::BeginPlay() {
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultStartWidget has not been set."));
 	}
 
-	SetInputMode(true);
+	if (GameInstanceRef != NULL) {
+		GameInstanceRef->SetInputMode(true);
+	}
 
 	if (DefaultGameHUD) {
 		GameHUD = CreateWidget<UUserWidget>(GetWorld(), DefaultGameHUD);
@@ -116,7 +121,6 @@ void AMyGameMode::StartGame() {
 
 void AMyGameMode::TogglePauseGame(){
 	bPauseGame = !bPauseGame;
-	OnUpdateStartButton.Broadcast("Resume");
 
 	if (bPauseGame) {
 		StartWidget->AddToViewport();
@@ -125,6 +129,8 @@ void AMyGameMode::TogglePauseGame(){
 		StartWidget->RemoveFromViewport();
 	}
 
-	SetInputMode(!bPauseGame);
+	if (GameInstanceRef != NULL) {
+		GameInstanceRef->SetInputMode(!bPauseGame);
+	}
 	UGameplayStatics::SetGamePaused(GetWorld(), bPauseGame);
 }

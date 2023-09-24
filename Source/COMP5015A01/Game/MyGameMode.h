@@ -6,9 +6,12 @@
 #include "GameFramework/GameModeBase.h"
 #include "MyGameMode.generated.h"
 
+// FORWARD DECLARATIONS
+class UMyGameInstance;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateScore, float, NewScore);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateTimer, FString, NewTime);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateStartButton, FString, NewStartButtonText);
+
 
 UCLASS()
 class COMP5015A01_API AMyGameMode : public AGameModeBase
@@ -21,6 +24,9 @@ public:
 
 protected:
 	FTimerHandle CountdownTimer;
+
+	UPROPERTY(BlueprintReadOnly)
+	UMyGameInstance* GameInstanceRef;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
 	TSubclassOf<UUserWidget> DefaultGameCompleteWidget;
@@ -60,9 +66,6 @@ protected:
 
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
 	FOnUpdateTimer OnUpdateTimer;
-
-	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
-	FOnUpdateStartButton OnUpdateStartButton;
 
 public:
 	// Called when the game starts or when spawned
