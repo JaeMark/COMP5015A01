@@ -2,8 +2,8 @@
 
 #include "MyGameMode.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/TextBlock.h" 
 #include "COMP5015A01/Game/MyGameInstance.h"
 
 AMyGameMode::AMyGameMode() {
@@ -42,6 +42,16 @@ void AMyGameMode::UpdateTimer()
 
 	// Update your UI with the TimerText
 	OnUpdateTimer.Broadcast(TimerText);
+
+	if (CountdownTime <= CountdownTimeWarning && !bHasColourChanged) {
+		UTextBlock* TimerTextBlock = Cast<UTextBlock>(GameHUD->GetWidgetFromName(TEXT("Timer"))); 
+		if (TimerTextBlock) {
+			FLinearColor Color = WarningColour;
+			FSlateColor SlateColor = FSlateColor(Color);
+			TimerTextBlock->SetColorAndOpacity(SlateColor);
+			bHasColourChanged = true;
+		}
+	}
 
 	if (CountdownTime == 0) {
 		GetWorldTimerManager().ClearTimer(CountdownTimer);

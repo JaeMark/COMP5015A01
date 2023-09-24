@@ -49,11 +49,17 @@ protected:
 	UPROPERTY()
 	float CurrentScore = 0.0f;
 
-	UPROPERTY()
-	int32 CountdownTime = 5;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Timer")
+	int32 CountdownTime = 15;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSoftObjectPtr<UWorld> GameLevel;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Timer")
+	int32 CountdownTimeWarning = 10;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Timer")
+	bool bHasColourChanged = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Timer")
+	FLinearColor WarningColour = FLinearColor::Red;
 
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
 	FOnUpdateScore OnUpdateScore;
