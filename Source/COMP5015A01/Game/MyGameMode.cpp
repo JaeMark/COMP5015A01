@@ -101,8 +101,7 @@ void AMyGameMode::StartGame() {
 	if (bIsPlaying) {
 		// Pause game if game is still running
 		TogglePauseGame();
-	}
-	else {
+	} else {
 		// Load level if game is not running
 		if (GameLevel.IsNull()) {
 			UE_LOG(LogTemp, Error, TEXT("No GameLevel set"));
@@ -117,6 +116,7 @@ void AMyGameMode::StartGame() {
 
 void AMyGameMode::TogglePauseGame(){
 	bPauseGame = !bPauseGame;
+	OnUpdateStartButton.Broadcast("Resume");
 
 	if (bPauseGame) {
 		StartWidget->AddToViewport();
