@@ -14,14 +14,7 @@ AMyGameMode::AMyGameMode() {
 void AMyGameMode::BeginPlay() {
 	GameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
-	if (DefaultStartWidget) {
-		StartWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultStartWidget);
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultStartWidget has not been set."));
-	}
-
-	if (GameInstanceRef != NULL) {
+	if (GameInstanceRef) {
 		GameInstanceRef->SetInputMode(true);
 	}
 
@@ -116,7 +109,6 @@ void AMyGameMode::StartGame() {
 		UGameplayStatics::SetGamePaused(GetWorld(), false);
 		UGameplayStatics::OpenLevelBySoftObjectPtr(this, GameLevel);
 	}
-
 }
 
 void AMyGameMode::TogglePauseGame(){

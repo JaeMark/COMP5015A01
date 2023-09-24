@@ -3,7 +3,17 @@
 
 #include "MyGameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "Blueprint/UserWidget.h"
 
+
+void UMyGameInstance::Init() {
+	if (DefaultStartWidget) {
+		StartWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultStartWidget);
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultStartWidget has not been set."));
+	}
+}
 void UMyGameInstance::SetInputMode(bool GameOnly) const {
 	const UWorld* World = GetWorld();
 	if (!World) {
@@ -56,4 +66,7 @@ void UMyGameInstance::LoadLevel()
 void UMyGameInstance::ResumeGame()
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), false);
+	if (StartWidget) {
+		StartWidget->RemoveFromViewport();
+	}
 }

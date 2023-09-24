@@ -24,7 +24,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSoftObjectPtr<UWorld> GameLevel;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
+	TSubclassOf<UUserWidget> DefaultStartWidget;
+
+	UPROPERTY()
+	UUserWidget* StartWidget;
+
 public:
+	virtual void Init() override;
+
 	UFUNCTION(BlueprintCallable, Category = "Input Mode")
 	void SetInputMode(bool GameOnly) const;
 
