@@ -28,10 +28,10 @@ protected:
 	UUserWidget* GameCompleteWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
-	TSubclassOf<UUserWidget> DefaultScoreWidget;
+	TSubclassOf<UUserWidget> DefaultGameHUD;
 
 	UPROPERTY()
-	UUserWidget* ScoreWidget;
+	UUserWidget* GameHUD;
 
 	UPROPERTY()
 	float CurrentScore = 0.0f;

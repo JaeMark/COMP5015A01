@@ -12,9 +12,9 @@ AMyGameMode::AMyGameMode() {
 
 void AMyGameMode::BeginPlay() {
 
-	if (DefaultScoreWidget) {
-		ScoreWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultScoreWidget);
-		ScoreWidget->AddToViewport();
+	if (DefaultGameHUD) {
+		GameHUD = CreateWidget<UUserWidget>(GetWorld(), DefaultGameHUD);
+		GameHUD->AddToViewport();
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultScoreWidget has not been set."));
