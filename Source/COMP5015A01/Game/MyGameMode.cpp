@@ -48,16 +48,6 @@ void AMyGameMode::UpdateTimer()
 }
 
 void AMyGameMode::GameCompleted() {
-	// Set the input mode to UI Only
-	FInputModeUIOnly InputModeData;
-	InputModeData.SetWidgetToFocus(GameCompleteWidget->TakeWidget());
-	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-
-	// Create a variable to store the player controller
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
-	PlayerController->SetInputMode(InputModeData);
-	PlayerController->bShowMouseCursor = true;
-
 	if (DefaultGameCompleteWidget) {
 		GameCompleteWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultGameCompleteWidget);
 		if (GameCompleteWidget) {
@@ -67,6 +57,14 @@ void AMyGameMode::GameCompleted() {
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultGameCompleteWidget has not been set."));
 	}
+
+	// Set the input mode to UI Only
+	FInputModeUIOnly InputModeData;
+	InputModeData.SetWidgetToFocus(GameCompleteWidget->TakeWidget());
+	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+	PlayerController->SetInputMode(InputModeData);
+	PlayerController->bShowMouseCursor = true;
 }
 
 void AMyGameMode::UpdateScore_Implementation(float DeltaScore) {

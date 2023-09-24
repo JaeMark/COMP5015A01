@@ -37,7 +37,7 @@ protected:
 	float CurrentScore = 0.0f;
 
 	UPROPERTY()
-	int32 CountdownTime = 120;
+	int32 CountdownTime = 20;
 
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
 	FOnUpdateScore OnUpdateScore;
