@@ -23,12 +23,28 @@ void AMyGameMode::BeginPlay() {
 
 	OnUpdateScore.Broadcast(CurrentScore);
 
-	GetWorldTimerManager().SetTimer(CountdownTimer, this, &AMyGameMode::UpdateTimer, 1.0f, false);
+	GetWorldTimerManager().SetTimer(CountdownTimer, this, &AMyGameMode::UpdateTimer, 1.0f, true);
 }
 
 void AMyGameMode::UpdateTimer()
 {
+	if (CountdownTime > 0) {
+		// Convert seconds to minutes and seconds
+		int32 Minutes = CountdownTime / 60;
+		int32 Seconds = CountdownTime % 60;
 
+		// Format the time as "MM:SS"
+		FString TimerText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
+
+		// Update your UI with the TimerText
+		OnUpdateTimer.Broadcast(TimerText);
+
+		CountdownTime--;
+	}
+	else {
+		// Timer has reached zero, do something (e.g., trigger game completion)
+		GameCompleted();
+	}
 }
 
 void AMyGameMode::GameCompleted() {

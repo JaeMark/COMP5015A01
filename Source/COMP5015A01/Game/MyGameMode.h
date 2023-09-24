@@ -7,7 +7,7 @@
 #include "MyGameMode.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateScore, float, NewScore);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateTimer, float, NewTime);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateTimer, FString, NewTime);
 
 UCLASS()
 class COMP5015A01_API AMyGameMode : public AGameModeBase
@@ -36,11 +36,14 @@ protected:
 	UPROPERTY()
 	float CurrentScore = 0.0f;
 
+	UPROPERTY()
+	int32 CountdownTime = 120;
+
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
 	FOnUpdateScore OnUpdateScore;
 
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
-	FOnUpdateScore OnUpdateTimer;
+	FOnUpdateTimer OnUpdateTimer;
 
 public:
 	// Called when the game starts or when spawned
