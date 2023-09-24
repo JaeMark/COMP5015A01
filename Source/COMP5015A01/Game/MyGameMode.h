@@ -33,11 +33,20 @@ protected:
 	UPROPERTY()
 	UUserWidget* GameHUD;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
+	TSubclassOf<UUserWidget> DefaultStartWidget;
+
+	UPROPERTY()
+	UUserWidget* StartWidget;
+
 	UPROPERTY()
 	float CurrentScore = 0.0f;
 
 	UPROPERTY()
 	int32 CountdownTime = 5;
+
+	UPROPERTY()
+	bool bPauseGame = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSoftObjectPtr<UWorld> GameLevel;
@@ -57,6 +66,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Game")
 	void ReplayGame();
+
+	UFUNCTION(BlueprintCallable, Category = "Game")
+	void TogglePauseGame();
 
 	UFUNCTION(BlueprintCallable, Category = "Input Mode")
 	void SetInputMode(bool GameOnly) const;

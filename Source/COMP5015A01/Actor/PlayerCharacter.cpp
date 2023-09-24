@@ -7,6 +7,8 @@
 #include "Engine/Engine.h"
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/FloatingPawnMovement.h"
+#include "Kismet/GameplayStatics.h"
+#include "COMP5015A01/Game/MyGameMode.h"
 
 using UEILPS = UEnhancedInputLocalPlayerSubsystem;
 using UEIC = UEnhancedInputComponent;
@@ -41,6 +43,8 @@ APlayerCharacter::APlayerCharacter()
     // Add an initial impulse to make the ball bounce
     const FVector InitialImpulse = FVector(0.0f, 0.0f, 1000.0f); // Adjust the Z component to control the initial bounce height
     Cube->AddImpulse(InitialImpulse, NAME_None, true);
+
+    GameModeRef = Cast<AMyGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 // Called when the game starts or when spawned
@@ -73,11 +77,12 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     Super::SetupPlayerInputComponent(PlayerInputComponent);
     if (UEIC* EnhancedInputComponent = CastChecked<UEIC>(PlayerInputComponent)) {
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::MoveHorizontally);
-        EnhancedInputComponent->BindAction(BoostAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Boost);
+        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Jump);
+        EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Triggered, this, &APlayerCharacter::PauseGame);
     }
 }
 
-void APlayerCharacter::Boost(const FInputActionValue& Value)
+void APlayerCharacter::Jump(const FInputActionValue& Value)
 {
     // Apply a boost force to the cube
     if (Value.Get<float>() > 0.0f) {
@@ -85,6 +90,12 @@ void APlayerCharacter::Boost(const FInputActionValue& Value)
     }
 }
 
+void APlayerCharacter::PauseGame()
+{
+    if (GameModeRef != NULL) {
+        GameModeRef->TogglePauseGame();
+    }
+}
 
 void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

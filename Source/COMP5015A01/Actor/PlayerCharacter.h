@@ -14,6 +14,7 @@ class UBoxComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UFloatingPawnMovement;
+class AMyGameMode;
 
 UCLASS()
 class COMP5015A01_API APlayerCharacter : public APawn
@@ -45,10 +46,14 @@ protected:
 	UInputAction* MoveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UInputAction* BoostAction;
+	UInputAction* JumpAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* PauseAction;
 
 	void MoveHorizontally(const FInputActionValue& Value);
-	void Boost(const FInputActionValue& Value);
+	void Jump(const FInputActionValue& Value);
+	void PauseGame();
 
 	// ASSET COMPONENTS
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
@@ -66,6 +71,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Movement");
 	float BoostForce = 1800.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	AMyGameMode* GameModeRef;
 
 	UFUNCTION() // The names of these functions don't matter, but the signature does.
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

@@ -11,6 +11,12 @@ AMyGameMode::AMyGameMode() {
 }
 
 void AMyGameMode::BeginPlay() {
+	if (DefaultStartWidget) {
+		StartWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultStartWidget);
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultStartWidget has not been set."));
+	}
 
 	if (DefaultGameHUD) {
 		GameHUD = CreateWidget<UUserWidget>(GetWorld(), DefaultGameHUD);
@@ -75,6 +81,9 @@ void AMyGameMode::GameCompleted() {
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultGameCompleteWidget has not been set."));
 	}
+
+	// Pause game
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
 }
 
 void AMyGameMode::UpdateScore_Implementation(float DeltaScore) {
@@ -89,4 +98,17 @@ void AMyGameMode::ReplayGame() {
 	}
 
 	UGameplayStatics::OpenLevelBySoftObjectPtr(this, GameLevel);
+}
+
+void AMyGameMode::TogglePauseGame(){
+	bPauseGame = !bPauseGame;
+
+	if (bPauseGame) {
+		StartWidget->AddToViewport();
+	}
+	else {
+		StartWidget->RemoveFromViewport();
+	}
+
+	UGameplayStatics::SetGamePaused(GetWorld(), bPauseGame);
 }
