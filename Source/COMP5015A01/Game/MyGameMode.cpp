@@ -45,6 +45,26 @@ void AMyGameMode::UpdateTimer()
 	CountdownTime--;
 }
 
+void AMyGameMode::SetInputMode(bool GameOnly) const {
+	const UWorld* World = GetWorld();
+	if (!World) {
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("Cannot access world"));
+		return;
+	}
+	if (APlayerController* const Controller = World->GetFirstPlayerController()) {
+		if (!GameOnly) {
+			const FInputModeGameOnly InputMode;
+			Controller->SetInputMode(InputMode);
+		}
+		else {
+			const FInputModeUIOnly InputMode;
+			Controller->SetInputMode(InputMode);
+		}
+
+		Controller->bShowMouseCursor = !GameOnly;
+	}
+}
+
 void AMyGameMode::GameCompleted() {
 	if (DefaultGameCompleteWidget) {
 		GameCompleteWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultGameCompleteWidget);
@@ -55,14 +75,6 @@ void AMyGameMode::GameCompleted() {
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultGameCompleteWidget has not been set."));
 	}
-
-	// Set the input mode to UI Only
-	FInputModeUIOnly InputModeData;
-	InputModeData.SetWidgetToFocus(GameCompleteWidget->TakeWidget());
-	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
-	PlayerController->SetInputMode(InputModeData);
-	PlayerController->bShowMouseCursor = true;
 }
 
 void AMyGameMode::UpdateScore_Implementation(float DeltaScore) {

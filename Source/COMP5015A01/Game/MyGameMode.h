@@ -58,6 +58,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Game")
 	void ReplayGame();
 
+	UFUNCTION(BlueprintCallable, Category = "Input Mode")
+	void SetInputMode(bool GameOnly) const;
+
 protected:
 	void GameCompleted();
 	void UpdateTimer();
