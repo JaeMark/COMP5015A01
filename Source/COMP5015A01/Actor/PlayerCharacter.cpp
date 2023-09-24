@@ -93,7 +93,7 @@ void APlayerCharacter::Jump(const FInputActionValue& Value)
 void APlayerCharacter::PauseGame()
 {
     if (GameModeRef != NULL) {
-        GameModeRef->TogglePauseGame();
+        GameModeRef->StartGame();
     }
 }
 

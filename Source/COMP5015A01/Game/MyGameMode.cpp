@@ -28,8 +28,9 @@ void AMyGameMode::BeginPlay() {
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultScoreWidget has not been set."));
 	}
 
-	OnUpdateScore.Broadcast(CurrentScore);
+	bIsPlaying = true;
 
+	OnUpdateScore.Broadcast(CurrentScore);
 	GetWorldTimerManager().SetTimer(CountdownTimer, this, &AMyGameMode::UpdateTimer, 1.0f, true);
 }
 
@@ -84,6 +85,7 @@ void AMyGameMode::GameCompleted() {
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString("DefaultGameCompleteWidget has not been set."));
 	}
 
+	bIsPlaying = false;
 	OnUpdateScore.Broadcast(CurrentScore);
 
 	// Pause game
@@ -96,13 +98,21 @@ void AMyGameMode::UpdateScore_Implementation(float DeltaScore) {
 }
 
 void AMyGameMode::StartGame() {
-	if (GameLevel.IsNull()){
-		UE_LOG(LogTemp, Error, TEXT("No GameLevel set"));
-		return;
+	if (bIsPlaying) {
+		// Pause game if game is still running
+		TogglePauseGame();
+	}
+	else {
+		// Load level if game is not running
+		if (GameLevel.IsNull()) {
+			UE_LOG(LogTemp, Error, TEXT("No GameLevel set"));
+			return;
+		}
+
+		UGameplayStatics::SetGamePaused(GetWorld(), false);
+		UGameplayStatics::OpenLevelBySoftObjectPtr(this, GameLevel);
 	}
 
-	UGameplayStatics::SetGamePaused(GetWorld(), false);
-	UGameplayStatics::OpenLevelBySoftObjectPtr(this, GameLevel);
 }
 
 void AMyGameMode::TogglePauseGame(){
