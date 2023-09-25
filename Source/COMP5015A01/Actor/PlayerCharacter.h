@@ -16,6 +16,8 @@ class UCameraComponent;
 class UFloatingPawnMovement;
 class AMyGameMode;
 class UMyGameInstance;
+class USpringArmComponent;
+class UCameraComponent;
 
 UCLASS()
 class COMP5015A01_API APlayerCharacter : public APawn
@@ -72,6 +74,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
 	UFloatingPawnMovement* MovementComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
+	USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
+	UCameraComponent* Camera;
 
 	// MOVEMENT VARIABLES
 	UPROPERTY(EditAnywhere, Category = "Movement");

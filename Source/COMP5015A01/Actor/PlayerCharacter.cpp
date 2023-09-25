@@ -10,6 +10,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "COMP5015A01/Game/MyGameMode.h"
 #include "COMP5015A01/Game/MyGameInstance.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 
 using UEILPS = UEnhancedInputLocalPlayerSubsystem;
 using UEIC = UEnhancedInputComponent;
@@ -33,6 +35,12 @@ APlayerCharacter::APlayerCharacter()
     Cube->BodyInstance.bLockZRotation = true;
     // Lock cube x translation
     Cube->BodyInstance.bLockXTranslation = true;
+
+    SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+    SpringArm->SetupAttachment(Cube);
+
+    Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+    Camera->SetupAttachment(SpringArm);
 
     CollectorCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("CollectorCollider"));
     CollectorCollider->SetupAttachment(Cube);
