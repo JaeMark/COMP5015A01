@@ -29,12 +29,17 @@ protected:
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	// Function to destroy the actor
+	void DestroyActor();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 
 protected:
+	FTimerHandle LifetimeTimer;
+
 	// ASSET COMPONENTS
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		USceneComponent* Root;
@@ -46,5 +51,9 @@ protected:
 		UStaticMeshComponent* Collectable;
 
 	UFUNCTION(BlueprintImplementableEvent)
-		void UpdateScore(float DeltaScore) const;
+	void UpdateScore(float DeltaScore) const;
+
+	// Lifetime of the actor in seconds
+	UPROPERTY(EditAnywhere)
+	float Lifetime = 5.0f;
 };

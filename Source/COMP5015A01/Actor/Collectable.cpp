@@ -32,6 +32,8 @@ ACollectable::ACollectable()
 void ACollectable::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetWorldTimerManager().SetTimer(LifetimeTimer, this, &ACollectable::DestroyActor, Lifetime, false);
 }
 
 // Called every frame
@@ -48,6 +50,11 @@ void ACollectable::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 		UpdateScore(PickupValue);
 		Destroy();
 	} 
+}
+
+void ACollectable::DestroyActor()
+{
+	Destroy();
 }
 
 
