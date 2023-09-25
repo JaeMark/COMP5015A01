@@ -50,7 +50,7 @@ protected:
 	float CurrentScore = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Timer")
-	int32 CountdownTime = 90;
+	int32 CountdownTime = 60;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Timer")
 	int32 CountdownTimeWarning = 15;
