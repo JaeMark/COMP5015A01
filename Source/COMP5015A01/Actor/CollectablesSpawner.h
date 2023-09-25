@@ -24,6 +24,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void SpawnCollectable();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -35,11 +37,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
 	UBoxComponent* SpawnVolume;
 
-private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<ACollectable> CollectablesToSpawn;
+	TArray<TSubclassOf<ACollectable>> CollectablesToSpawn;	
 
-	void SpawnCollectable();
+	float SpawnInterval = 0.5f;
 };
 
 

@@ -19,7 +19,7 @@ void ACollectablesSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(SpawnerTimer, this, &ACollectablesSpawner::SpawnCollectable, 2.0f, true);
+	GetWorldTimerManager().SetTimer(SpawnerTimer, this, &ACollectablesSpawner::SpawnCollectable, SpawnInterval, true);
 
 }
 
@@ -31,11 +31,20 @@ void ACollectablesSpawner::Tick(float DeltaTime)
 
 void ACollectablesSpawner::SpawnCollectable()
 {
-    const FVector SpawnLocation = FVector(GetActorLocation().X,
-										  FMath::RandRange(SpawnVolume->GetComponentLocation().Y - SpawnVolume->GetScaledBoxExtent().Y,
-										  SpawnVolume->GetComponentLocation().Y + SpawnVolume->GetScaledBoxExtent().Y),
-									      GetActorLocation().Z);
+    if (CollectablesToSpawn.Num() == 0)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("No collectables available to spawn!"));
+        return;
+    }
 
-    // Spawn the collectable
-    ACollectable* NewCollectable = GetWorld()->SpawnActor<ACollectable>(CollectablesToSpawn, SpawnLocation, FRotator::ZeroRotator);
+    const FVector SpawnLocation = FVector(GetActorLocation().X,
+        FMath::RandRange(SpawnVolume->GetComponentLocation().Y - SpawnVolume->GetScaledBoxExtent().Y,
+        SpawnVolume->GetComponentLocation().Y + SpawnVolume->GetScaledBoxExtent().Y),
+        GetActorLocation().Z);
+
+    // Generate a random index to select a random collectable from the array
+    int32 RandomIndex = FMath::RandRange(0, CollectablesToSpawn.Num() - 1);
+
+    // Spawn the random collectable
+    ACollectable* NewCollectable = GetWorld()->SpawnActor<ACollectable>(CollectablesToSpawn[RandomIndex], SpawnLocation, FRotator::ZeroRotator);
 }

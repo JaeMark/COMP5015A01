@@ -55,5 +55,5 @@ protected:
 
 	// Lifetime of the actor in seconds
 	UPROPERTY(EditAnywhere)
-	float Lifetime = 5.0f;
+	float Lifetime = 60.0f;
 };

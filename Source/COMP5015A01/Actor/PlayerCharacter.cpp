@@ -69,10 +69,6 @@ void APlayerCharacter::BeginPlay()
             SubSystem->AddMappingContext(InputMappingContext, 0);
         }
     }
-
-    if (CollectorCollider) {
-        CollectorCollider->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBeginOverlap);
-    }
 }
 
 void APlayerCharacter::PlayerDied() {
@@ -114,15 +110,6 @@ void APlayerCharacter::PauseGame()
         GameInstanceRef->PauseGame();
     }
 }
-
-void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-    if (OtherActor && OtherActor->IsA(ACollectable::StaticClass())) {
-        //OtherActor->Destroy();
-    }
-}
-
 void APlayerCharacter::MoveHorizontally(const FInputActionValue& Value) 
 {
     // Move the sphere horizontally based on input
